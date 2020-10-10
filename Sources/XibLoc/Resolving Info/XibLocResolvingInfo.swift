@@ -83,9 +83,12 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 	private var _parsingInfo: XibLocParsingInfo?
 	var parsingInfo: XibLocParsingInfo {
 		/* Warning: Thread-safety issue if we care about thread-safety one day… */
+		NSLog("In parsingInfo getter - before if")
 		if let pi = _parsingInfo {return pi}
 		
+		NSLog("In parsingInfo getter - before assertion failure")
 		assertionFailure("initParsingInfo() must be call in all the inits of XibLocParsingInfo, and the init must be failed if the method returns false.")
+		NSLog("In parsingInfo getter - after assertion failure")
 		return XibLocParsingInfo(resolvingInfo: self)!
 	}
 	
@@ -106,6 +109,7 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 		simpleReturnTypeReplacements srtr: [OneWordTokens: (_ originalValue: ReturnType) -> ReturnType] = [:],
 		identityReplacement ir: @escaping (_ source: SourceType) -> ReturnType
 	) {
+		NSLog("XibLocResolvingInfo init - start")
 		defaultPluralityDefinition = dpd
 		escapeToken = et
 		simpleSourceTypeReplacements = sstr
@@ -115,9 +119,12 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 		simpleReturnTypeReplacements = srtr
 		identityReplacement = ir
 		
+		NSLog("XibLocResolvingInfo init - variables set, calling guard")
 		guard initParsingInfo() else {
+			NSLog("XibLocResolvingInfo init - in guard, we fail init")
 			return nil
 		}
+		NSLog("XibLocResolvingInfo init - end")
 	}
 	
 	public init(identityReplacement ir: @escaping (_ source: SourceType) -> ReturnType) {
